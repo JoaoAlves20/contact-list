@@ -1,4 +1,10 @@
-import { readFile } from "fs/promises";
+import { readFile, writeFile } from "fs/promises";
+
+interface Contact {
+    name: string,
+    email: string,
+    phoneNumber: string
+}
 
 class ContactService {
     private _filename: string;
@@ -7,7 +13,7 @@ class ContactService {
         this._filename = filename;
     }
     
-    async readAll() {
+    async read() {
         try {
             const data = await readFile(this._filename, "utf-8");
             const lines = data.split("\n").filter(line => line.trim() !== "");
@@ -18,6 +24,35 @@ class ContactService {
             })
 
             return contacts;
+        } catch (err) {
+            console.error("Error", err);
+        }
+    }
+
+    async write({ name, email, phoneNumber }: Contact) {
+        try {
+            const contacts = await this.read();
+
+            const lastId = contacts?.[contacts.length - 1]?.id ?? 1;
+
+            if (lastId === 1) {
+                const newContact = { id: lastId, name, email, phoneNumber };
+
+                const text = `${newContact.id}, ${newContact.name}, ${newContact.email}, ${newContact.phoneNumber}`
+                
+                await writeFile(this._filename, text, "utf-8");
+                return newContact;
+            } else {
+                const newContact = { id: lastId, name, email, phoneNumber };
+                contacts?.push(newContact);
+
+                const text = contacts?.map(contact => (
+                    `${contact.id}, ${contact.name}, ${contact.email}, ${contact.phoneNumber}`
+                )).join("\n");
+
+                await writeFile(this._filename, text ?? "", "utf-8");
+                return newContact;
+            }
         } catch (err) {
             console.error("Error", err);
         }
