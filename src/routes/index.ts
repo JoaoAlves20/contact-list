@@ -1,10 +1,9 @@
 import { Router } from "express";
 
-import ContactController from "../controller/contactController";
+import ContactController from "../controllers/contactController";
 
 export const router = Router();
 
-router.get("/", ContactController.findAll);
-router.get("/find", ContactController.findByEmail);
-router.get("/find/:id", ContactController.findById);
-router.post("/", ContactController.createContact);
+router.post("/contact", ContactController.create);
+router.get("/contacts", ContactController.findAll);
+router.delete("/contact", ContactController.removeContact);

@@ -6,7 +6,7 @@
   "author": "JoaoAlves20 <jvsimoesalves@gmail.com>",
   "type": "module",
   "scripts": {
-    "dev:start": "node --env-file=.env --import=tsx --watch src/index.ts"
+    "dev:start": "node --import=tsx --watch src/index.ts"
   },
   "license": "MIT",
   "devDependencies": {
